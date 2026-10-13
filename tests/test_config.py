@@ -66,7 +66,9 @@ class TestConfig:
         tmp_config.set("exa_api_key", "test-key")
         assert tmp_config.is_configured("exa_search")
 
-    def test_get_configured_features(self, tmp_config):
+    def test_get_configured_features(self, tmp_config, monkeypatch):
+        for key in ("EXA_API_KEY", "GITHUB_TOKEN", "GROQ_API_KEY", "OPENAI_API_KEY"):
+            monkeypatch.delenv(key, raising=False)
         features = tmp_config.get_configured_features()
         assert isinstance(features, dict)
         assert "exa_search" in features
